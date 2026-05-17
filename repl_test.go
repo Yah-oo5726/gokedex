@@ -33,6 +33,10 @@ func TestCleanInput(t *testing.T) {
 			input:    "  ",
 			expected: []string{},
 		},
+		{
+			input:    "Uppercase text",
+			expected: []string{"uppercase", "text"},
+		},
 	}
 
 	for _, c := range cases {

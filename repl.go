@@ -5,5 +5,9 @@ import (
 )
 
 func cleanInput(text string) []string {
-	return strings.Fields(text)
+	words := strings.Fields(text)
+	for i, word := range words {
+		words[i] = strings.ToLower(word)
+	}
+	return words
 }
