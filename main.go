@@ -7,6 +7,10 @@ import (
 )
 
 func main() {
+	command_configs := config{
+		next:     "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20",
+		previous: "",
+	}
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
@@ -17,7 +21,7 @@ func main() {
 			fmt.Println("Unknown command")
 		} else {
 			command_handler := command.callback
-			command_handler()
+			command_handler(&command_configs)
 		}
 	}
 }
