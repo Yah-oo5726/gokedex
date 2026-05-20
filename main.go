@@ -23,5 +23,6 @@ func main() {
 			command_handler := command.callback
 			command_handler(&command_configs)
 		}
+		scanner.Err()
 	}
 }
