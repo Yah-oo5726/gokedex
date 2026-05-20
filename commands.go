@@ -3,9 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
 	"os"
+	"time"
+
+	pokecache "github.com/Yah-oo5726/gokedex/internal"
 )
 
 type config struct {
@@ -30,8 +31,10 @@ type map_response struct {
 }
 
 var commands map[string]cliCommand
+var cache *pokecache.Cache
 
 func init() {
+	cache = pokecache.NewCache(10 * time.Second)
 	commands = map[string]cliCommand{
 		"exit": {
 			name:        "exit",
@@ -90,18 +93,14 @@ func commandMapb(cfg *config) error {
 }
 
 func printLocationAreasOnPage(url string) (string, string) {
-	location_areas, err := http.Get(url)
+	location_areas, err := cache.GetFrom(url)
 	if err != nil {
 		fmt.Println("Error getting location areas")
 		return "", ""
 	}
-	defer location_areas.Body.Close()
-	data, err := io.ReadAll(location_areas.Body)
-	if err != nil {
-		fmt.Println("Error reading location data")
-	}
+
 	result := map_response{}
-	err = json.Unmarshal(data, &result)
+	err = json.Unmarshal(location_areas, &result)
 	if err != nil {
 		fmt.Println("Error unmarshaling location areas")
 		return "", ""
