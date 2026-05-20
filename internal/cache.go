@@ -1,6 +1,8 @@
 package pokecache
 
 import (
+	"io"
+	"net/http"
 	"sync"
 	"time"
 )
@@ -45,4 +47,24 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	defer c.mu.Unlock()
 	entry, exists := c.entries[key]
 	return entry.val, exists
+}
+
+func (c *Cache) GetFrom(url string) ([]byte, error) {
+	response, exists := c.Get(url)
+	if exists {
+		return response, nil
+	} else {
+		response, err := http.Get(url)
+		if err != nil {
+			return nil, err
+		}
+		defer response.Body.Close()
+
+		body, err := io.ReadAll(response.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		return body, nil
+	}
 }
