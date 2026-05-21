@@ -21,7 +21,7 @@ func main() {
 			fmt.Println("Unknown command")
 		} else {
 			command_handler := command.callback
-			command_handler(&command_configs)
+			command_handler(&command_configs, clean_input[1:])
 		}
 		scanner.Err()
 	}
