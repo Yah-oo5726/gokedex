@@ -433,6 +433,11 @@ func init() {
 			description: "Inspect a caught Pokemon.",
 			callback:    commandInspect,
 		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "Lists all caught pokemon.",
+			callback:    commandPokedex,
+		},
 	}
 }
 
@@ -471,6 +476,14 @@ func commandMapb(cfg *config, parameters []string) error {
 
 func commandExplore(cfg *config, parameters []string) error {
 	printPokemonEncountersInLocation(parameters[0])
+	return nil
+}
+
+func commandPokedex(cfg *config, parameters []string) error {
+	fmt.Println("Your Pokedex:")
+	for name := range caught {
+		fmt.Printf("- %v\n", name)
+	}
 	return nil
 }
 
