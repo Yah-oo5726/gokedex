@@ -428,6 +428,11 @@ func init() {
 			description: "Attemps to catch a Pokemon.",
 			callback:    commandCatch,
 		},
+		"inspect": {
+			name:        "inspect",
+			description: "Inspect a caught Pokemon.",
+			callback:    commandInspect,
+		},
 	}
 }
 
@@ -466,6 +471,26 @@ func commandMapb(cfg *config, parameters []string) error {
 
 func commandExplore(cfg *config, parameters []string) error {
 	printPokemonEncountersInLocation(parameters[0])
+	return nil
+}
+
+func commandInspect(cfg *config, parameters []string) error {
+	pokemon_info, isCaught := caught[parameters[0]]
+	if !isCaught {
+		fmt.Println("Not yet caught")
+		return nil
+	}
+	fmt.Printf("Name: %s\n", pokemon_info.Name)
+	fmt.Printf("Height: %v\n", pokemon_info.Height)
+	fmt.Printf("Weight: %v\n", pokemon_info.Weight)
+	fmt.Println("Stats:")
+	for _, s := range pokemon_info.Stats {
+		fmt.Printf("  -%s: %v\n", s.Stat.Name, s.BaseStat)
+	}
+	fmt.Println("Types:")
+	for _, t := range pokemon_info.Types {
+		fmt.Printf("  -%s\n", t.Type.Name)
+	}
 	return nil
 }
 
